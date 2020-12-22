@@ -453,3 +453,7 @@ pip-selfcheck.json
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/vscode,python,venv,latex
+
+# Custom ignore
+tmp_*
+*/tmp_*

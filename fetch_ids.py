@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 import csv
-
+import os
 WRITE_BATCH = 1000
 count = 0
 def get_id(text):
@@ -23,21 +23,32 @@ def get_id(text):
     return None
 
 def main(dataset, output):
-    with open(dataset, 'r', newline='') as r, open(output, 'w', newline='') as w:
+    # check if some are already fetched
+    processed = 0
+    try:
+        processed = pd.read_csv(output).shape[0]
+    except IOError:
+        pass
+
+    with open(dataset, 'r', newline='') as r, open(output, 'a', newline='') as w:
         spamreader = csv.reader(r, delimiter=',', quotechar='"')
         spamwriter = csv.writer(w, delimiter=',',
                                 quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
         buffer = [["date", "to_fetch", "text"]]
         for row in spamreader:
-            _,_,_,_,_,_,_,_,date,text,_,_,_ = row
-            tweet_id = get_id(text)
-            if tweet_id != None:
-                buffer.append([date, True, tweet_id])
+            if processed == 0:
+                _,_,_,_,_,_,_,_,date,text,_,_,_ = row
+                tweet_id = get_id(text)
+                if tweet_id != None:
+                    buffer.append([date, True, tweet_id])
+                else:
+                    buffer.append([date, False, text])
+                if len(buffer) >= WRITE_BATCH:
+                    spamwriter.writerows(buffer)
+                    buffer.clear()
             else:
-                buffer.append([date, False, text])
-            if len(buffer) >= WRITE_BATCH:
-                spamwriter.writerows(buffer)
-                buffer.clear()
+                processed -= 1
+                
         spamwriter.writerows(buffer)
         buffer.clear()
         

@@ -66,8 +66,8 @@ def get_frequent_items(data, s):
     for _, tokens in data.iteritems():
         for token in tokens:
             curr_occ[token] = curr_occ.get(token, 0) + 1
-    frequencies = [[(token, ) for token, occ in curr_occ.items() if occ >= s * m]]
-    log(f"Got {len(frequencies[-1])} frequent itemsets if size 1: {frequencies[-1]}")
+    frequencies = [{(token, ) for token, occ in curr_occ.items() if occ >= s * m}]
+    log(f"Got {len(frequencies[-1])} frequent itemsets if size 1: {'' if len(frequencies[-1]) > 10 else frequencies[-1]}")
     curr_occ.clear()
 
     # get bigger itemsets
@@ -76,10 +76,11 @@ def get_frequent_items(data, s):
         # get frequent itemsets of size n
         for _, tokens in data.iteritems():
             for subset in itertools.combinations(tokens, n):
-                if all(x in frequencies[-1] for x in itertools.combinations(subset, n-1)):
+                if subset in curr_occ or  \
+                    all(x in frequencies[-1] for x in itertools.combinations(subset, n-1)):
                     curr_occ[subset] = curr_occ.get(subset, 0) + 1
-        frequencies.append([token for token, occ in curr_occ.items() if occ >= s * m])
-        log(f"Got {len(frequencies[-1])} frequent itemsets if size {n}: {frequencies[-1]}")
+        frequencies.append({token for token, occ in curr_occ.items() if occ >= s * m})
+        log(f"Got {len(frequencies[-1])} frequent itemsets if size {n}: {'' if len(frequencies[-1]) > 10 else frequencies[-1]}")
         n += 1
         curr_occ.clear()
     return functools.reduce(operator.iconcat, frequencies, [])
@@ -121,7 +122,7 @@ def get_frequent_items_in_time(dataset, s_f, p_f):
         for i in frequent_items:
             periods_frequent[i] = periods_frequent.get(i, 0) + 1
         time_periods += 1
-
+    log(f"{time_periods} anayzed, looking for topics in >= {p * time_periods} periods")
     return [i for i, f in periods_frequent.items() if f >= p * time_periods]
     # if frequencies:
     #     ll.append(frequencies)
@@ -136,6 +137,6 @@ def get_frequent_items_in_time(dataset, s_f, p_f):
 
 if __name__ == "__main__":
     dataset="data/tweets_clean.csv"
-    s = 0.05 # percent of tweets per period of time
-    p = 0.1 # percent of periods of time considered
-    print(get_frequent_items_in_time(dataset, s, p))
+    s = 0.02 # percent of tweets per period of time
+    p = 0.04 # percent of periods of time considered
+    print(sorted(get_frequent_items_in_time(dataset, s, p), key = lambda x : len(x)))

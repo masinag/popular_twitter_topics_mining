@@ -3,15 +3,16 @@ import csv
 import regex as re
 import html
 # import nltk
-from memory_profiler import profile
+# from memory_profiler import profile
 from utils import DATES, STOP_WORDS
 # stop_words = set(nltk.corpus.stopwords.words('english'))
 # word_rooter = nltk.stem.snowball.PorterStemmer(ignore_stopwords=False).stem
 
-my_punctuation = '!"”“$€£%&\'()*+,-./:;<=>?[\\]^_`{|}~•…–'
+my_punctuation = '!"”“’$€£%&\'()*+,-./:;<=>?[\\]^_`{|}~•…–'
 # email_regex = re.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
 # user_regex = re.compile("@[A-Za-z]+[A-Za-z0-9-_]+")
 url_regex = re.compile("((http|https)\:\/\/)?[a-z0-9\.\/\?\:@\-_=#]+\.([a-z]){2,6}([a-z0-9\.\&\/\?\:@\-_=#])*")
+number_regex = re.compile("(\d?\d?\d(?:[\.,'']\d\d\d)+)")
 punctuation_regex = re.compile("["+my_punctuation + "]+")
 emoji_regex = re.compile(pattern = "["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -30,10 +31,11 @@ emoji_regex = re.compile(pattern = "["
 def clean_tweet(tweet, bigrams=False):
     tweet = html.unescape(tweet)
     tweet = url_regex.sub(" ", tweet.lower()) # remove links
+    tweet = number_regex.sub("", tweet)
     # tweet = number_regex.sub("", tweet) # remove numbers
     tweet = emoji_regex.sub(" ", tweet) # remove emoji
     tweet = punctuation_regex.sub(" ", tweet) # strip punctuation
-    return " ".join((filter(lambda x : len(x) > 1 and x not in STOP_WORDS, tweet.split())))
+    return " ".join(set(filter(lambda x : len(x) > 1 and x not in STOP_WORDS, tweet.split())))
 
 # @profile
 def clean_dataset(dataset, output):

@@ -1,11 +1,13 @@
 import pandas as pd
 import csv
 import regex as re
+import html
 # import nltk
 from memory_profiler import profile
 from utils import DATES, STOP_WORDS
 # stop_words = set(nltk.corpus.stopwords.words('english'))
 # word_rooter = nltk.stem.snowball.PorterStemmer(ignore_stopwords=False).stem
+
 my_punctuation = '!"”“$€£%&\'()*+,-./:;<=>?[\\]^_`{|}~•…–'
 # email_regex = re.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
 # user_regex = re.compile("@[A-Za-z]+[A-Za-z0-9-_]+")
@@ -26,6 +28,7 @@ emoji_regex = re.compile(pattern = "["
 #     return user_regex.sub("", tweet)
 
 def clean_tweet(tweet, bigrams=False):
+    tweet = html.unescape(tweet)
     tweet = url_regex.sub(" ", tweet.lower()) # remove links
     # tweet = number_regex.sub("", tweet) # remove numbers
     tweet = emoji_regex.sub(" ", tweet) # remove emoji
@@ -52,3 +55,4 @@ if __name__ == "__main__":
     dataset = "data/covid19_tweets.csv"
     output = "data/tweets_clean.csv"
     clean_dataset(dataset, output)
+

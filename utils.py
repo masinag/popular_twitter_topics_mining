@@ -37,3 +37,5 @@ STOP_WORDS = {'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves',
 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', 
 "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', 
 "won't", 'wouldn', "wouldn't"}
+
+CONVERTERS = {"tokens" : lambda x : x.split()}

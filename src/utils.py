@@ -1,7 +1,7 @@
 import regex as re
 import datetime
 
-DATES = ['date']
+DATES = ['time']
 
 CONVERTERS = {'tokens' : lambda x : x.split()}
 

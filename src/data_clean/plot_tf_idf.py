@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 ld = {}
 
-with open("../../data/tmp_tf_idfs.dict") as f:
+with open("../../data/tf_idfs.dict") as f:
     ld = eval(f.read())
 
 flat = []

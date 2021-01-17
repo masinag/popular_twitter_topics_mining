@@ -2,6 +2,9 @@ import regex as re
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 
 STOP_WORDS = set(stopwords.words('english')).union({"can't"})
 PUNCTUATION = '!"”“#@$€£%&()*+,-./:;<=>?[\\]^_{|}~•…–—'

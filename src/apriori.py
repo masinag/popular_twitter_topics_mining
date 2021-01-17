@@ -90,11 +90,11 @@ def get_frequent_items(data, s):
 
 # @profile
 def get_frequent_items_in_time(dataset, s_f):
-    data = pd.read_csv(dataset, usecols=["date", "tokens"], encoding="utf-8", \
+    data = pd.read_csv(dataset, usecols=["time", "tokens"], encoding="utf-8", \
          parse_dates=DATES, converters = CONVERTERS)
     
     log("File read")
-    data["date_group"] = data.date.apply(get_day_half)
+    data["date_group"] = data.time.apply(get_day_half)
     # f_items, length = find_items(dataset)
     # print("items: %d, rows: %d" % (len(f_items), length))
     # print(f_items)
@@ -152,8 +152,8 @@ if __name__ == "__main__":
     ap.add_argument("--s", help="fraction of buckets to consider an itemset frequent", type=float, default=0.01)
     s = ap.parse_args().s
 
-    dataset="data/tweets_clean.csv"
-    output = f"bin/{s:.03f}#{get_curr_timestamp()}"
+    dataset="../data/cleaned_covid19_tweets.csv"
+    output = f"../bin/{s:.03f}#{get_curr_timestamp()}"
 
     # p = 0.04 # percent of periods of time considered
     fi, pt = get_frequent_items_in_time(dataset, s)

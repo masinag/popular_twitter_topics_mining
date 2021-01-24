@@ -2,9 +2,9 @@ import regex as re
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 import nltk
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
 
 STOP_WORDS = set(stopwords.words('english')).union({"can't"})
 PUNCTUATION = '!"”“#@$€£%&()*+,-./:;<=>?[\\]^_{|}~•…–—'
@@ -37,12 +37,6 @@ EMOJI_REGEX = re.compile("["
         u"\u3030"
         "]+", flags=re.UNICODE)
 
-
-# REPLACE = (('covid', (, )),)
-
-# REPLACE_RE = ((' ', (URL_REGEX, , , , )),) # replace urls, ..., with blank
-# REPLACE_RE +=('\'',)
-# REPLACE_RE += tuple((word, tuple(re.compile(eq) for eq in eqs)) for word, eqs in REPLACE) # replace each equivalent word with 
 
 REPLACE_RE = [
               (URL_REGEX                         , ' '),

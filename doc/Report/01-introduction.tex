@@ -1,0 +1,44 @@
+\section{Introduction and Motivation}
+\label{sec:intro}
+Everyday, millions of people access online communities and social networks, producing 
+a huge amount of content, that, if properly analyzed, can be exploited in many different ways.
+In particular, in this work we focus on Twitter, a social network where the main 
+content produced by users are tweets. Tweets are short texts, up to 280 characters,
+that are usually written by people to share with their followers something they think to be 
+relevant. Tweets can contain, for instance, funny jokes, special personal events or facts
+and opinions about current news. The latter are particularly important,
+because they reflect a part of the public opinion on recent events.
+Therefore, they can be exploited, for example, 
+by politicians to gain consensus or by social networks or other online platforms to 
+recommend contents about the most trending topics to better engage their users.
+By observing which concepts are frequently mentioned together, we could 
+identify the spread of some fake news. Also, trending topics 
+may be a good indicator of how a TV series has been welcomed by the public, and 
+film companies can regulate their investments accordingly.
+
+The purpose of this work is to identify which topics become popular many times 
+over time.
+% The purpose of this work is to identify
+% an effective method to identify consistent topics.
+
+We define a topic as a set of terms, that can be words, hashtags
+or another person's username. 
+One could think that a trending 
+topic is a topic that appears many times in the tweets of dataset, as in a typical 
+market-basket scenario, where we have many baskets, in this case represented by 
+tweets, each of which contains a small set of items, in this case represented by terms,
+and we are asked to identify the most frequent combinations of items bought together by
+customers.
+However, in the context of Twitter, tweets have also associated a timestamp, 
+that corresponds to the date and time the tweet has been posted. 
+
+Considering this, topics may be appear many times in some intervals of time, 
+when they are trending, while being less frequent in others. 
+Our objective is to identify popular consistent topics in time, i.e.\ topics that 
+are frequent in many periods of time.
+In the next sections we will define more formally the problem 
+and show a way to approach it. This procedure will then be evaluated and results will 
+be analyzed.
+
+
+

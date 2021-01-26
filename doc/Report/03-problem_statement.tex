@@ -1,0 +1,75 @@
+\section{Problem Statement}
+\label{sec:ps}
+In this Section we formalize the problem introduced in Section~\ref{sec:intro}, 
+providing also some definitions to better explain the problem and the proposed solution.
+
+First, we define some concepts used in the problem definition.
+\begin{definition}
+    A \emph{term} is a sequence of characters.
+\end{definition}
+\begin{definition}
+    A \emph{topic} is a set of terms.
+\end{definition}
+\begin{definition}
+    A \emph{tweet} $t$ is a pair $(\mathit{time}, \mathit{tokens})$ where
+    $\mathit{time}$ is a timestamp that indicates the moment in time the 
+    tweet has been posted and $\mathit{tokens}$ is a set of terms mentioned
+    in the text of the tweet.
+\end{definition}
+\begin{definition}
+    A topic $q$ is \emph{in} a tweet $t = (\mathit{time}, \mathit{tokens})$ if 
+    $\mathit{q} \subseteq \mathit{tokens}$.
+\end{definition}
+\begin{definition}
+    A \emph{period of time} $p$ is a pair $(\mathit{start}, \mathit{end})$ where
+    $\mathit{start}$ and $\mathit{end}$ are timestamps, such that 
+    $\mathit{start} \leq \mathit{end}$, indicating the start and 
+    the end time of $p$, respectively.
+\end{definition}
+\begin{definition}
+    A tweet $t = (\mathit{time}, \mathit{tokens})$ is \emph{in} a period of 
+    time $p = (\mathit{start}, \mathit{end})$ if 
+    $\mathit{start} \leq time < \mathit{end}$.
+\end{definition}
+\begin{definition}
+   Let $p$ be a period of time, $T$ be a set of tweets and $s \in \rm I\!R$ be
+   such that $0 \leq s \leq 1$.
+    Let
+   $T' = \{t_1, \dots, t_k\}$ be the set of tweets of $T$ that are in $p$. 
+
+   A topic $q$ is $s$\emph{-popular} in $T$ in the period $p$ if it is in at least
+   $x = s * k$ tweets of $T'$.
+\end{definition}
+\begin{definition}
+    Let $P = \{p_1, \dots, p_h\}$ be a set of periods of time, 
+    $T = \{t_1, \dots, t_k\}$ be a set of tweets and
+    $s, r \in \rm I\!R$ be such that $0 \leq s, r \leq 1$.
+
+    A topic $q$ is $r$\emph{-consistent-}$s$\emph{-popular} in $T$ in the periods $P$ 
+    if it is $s$-popular in $T$ in at least $y = r * h$ periods of time in $P$.
+ \end{definition}
+
+\paragraph{Input}
+As input of our problem we are given:
+\begin{itemize}
+    \item The list of $n$ tweets 
+$T = [\mathit{t}_1, \dots, \mathit{t}_n]$, where each tweet
+$\mathit{t}_i = (\mathit{time}_i, \mathit{tokens}_i)$;
+%  and $\mathit{time}_1 \leq \mathit{time}_2 \leq \dots \mathit{time}_n$;
+    \item The two real numbers $s, r \in \rm I\!R$
+    such that $0 \leq s, r \leq 1$;
+    \item Two timestamps $\mathit{start}$, $\mathit{end}$ and an integer $a \in \rm I\!N$
+    such that $a > 0$.
+    $\mathit{start}$ and $\mathit{end}$ indicate the start of the first period 
+    of time we consider and the end of the last one, respectively. The parameter
+    $a$ indicates the duration of each period of time, in seconds.
+    The periods of time we consider are
+    $P = \{(\mathit{start}, \mathit{start} + a), (\mathit{start} + a, \mathit{start} + 2a), 
+    \dots , (\mathit{start} + ka, \mathit{start} + (k+1)a),\}$
+    such that $\mathit{start} + ka < \mathit{end} \leq start + (k+1)a$. 
+\end{itemize}
+
+\paragraph{Output}
+
+The output is the set of $r$-consistent-$s$-popular topics in $T$ in 
+the periods of time $P$.

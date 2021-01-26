@@ -3,7 +3,7 @@ import datetime
 
 DATES = ['time']
 
-CONVERTERS = {'tokens' : lambda x : sorted(x.split())}
+CONVERTERS = {'tokens' : lambda x : frozenset(x.split())}
 
 DEBUG = True
 # RE_DATETIME = re.compile(r"(?P<y>\d\d\d\d)-(?P<mo>\d\d)-(?P<d>\d\d) "+ \

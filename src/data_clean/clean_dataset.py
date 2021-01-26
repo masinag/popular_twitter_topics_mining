@@ -1,5 +1,6 @@
 import pandas as pd
 import html
+import sys
 import csv
 import numpy as np
 from functools import reduce
@@ -13,7 +14,7 @@ from matplotlib import pyplot as plt
 
 LEMMATIZE = True
 
-TF_IDF_THRESHOLD = 3.20
+TF_IDF_THRESHOLD = 1.79
 
 tf_idfs = []
 lemmatizer = WordNetLemmatizer()
@@ -28,7 +29,7 @@ def get_df(tweets):
 def tokenize(tweets):
     df = get_df(tweets)
     N = tweets.shape[0]
-    print(tweets[0], set(tweets[0]))
+    # print(tweets[0], set(tweets[0]))
     # global tf_idfs
     rt_tweets = []
     for i, tweet in enumerate(tweets):
@@ -43,12 +44,14 @@ def tokenize(tweets):
             if tf_idf >= TF_IDF_THRESHOLD:
                 rt.append(term)
         
+        
         rt_tweets.append(rt)
 
     return pd.Series(rt_tweets).apply(lambda l : ' '.join(l))
 
 def is_token(term):
     return len(term) > 1 and (term not in STOP_WORDS) and (term not in ["n't"])
+    # return len(term) > 1 and (term not in ["n't"])
 
 def to_lem(term):
     global lemmatizer
@@ -75,6 +78,7 @@ def tokenize_dataset(dataset, output):
     data = pd.read_csv(dataset, usecols=('date', 'clean_text'), \
         encoding='utf-8', converters={'clean_text' : lambda x : x.split()})
     data['tokens'] = tokenize(data.clean_text)
+    data = data[data.tokens.str.len() > 0]
     tf_idfs.sort(reverse=True)
     
     print(f"""Quantiles:
@@ -87,6 +91,11 @@ def tokenize_dataset(dataset, output):
     0.50 : {np.quantile(tf_idfs, 0.50):.02f}
     0.75 : {np.quantile(tf_idfs, 0.75):.02f}
     1.00 : {np.quantile(tf_idfs, 1.00):.02f}
+
+    Mean:
+    {np.mean(tf_idfs):.02f}
+    Standard dev:
+    {np.std(tf_idfs):.02f}
     """)
     plt.plot(range(len(tf_idfs)), tf_idfs)
     plt.show()
@@ -100,14 +109,16 @@ if __name__ == '__main__':
     ap.add_argument("action", choices=['clean', 'tokenize', 'all'], default='all')
 
     action = ap.parse_args().action
+    base = ((sys.argv[0][:sys.argv[0].rfind('/') + 1]).rstrip('/') or '.') + '/'
+
 
     if action in ['clean', 'all']:
-        dataset = '../../data/original_covid19_tweets.csv'
-        output = '../../data/partial_cleaned_covid19_tweets.csv'
+        dataset = f'{base}../../data/original_covid19_tweets.csv'
+        output = f'{base}../../data/partial_cleaned_covid19_tweets.csv'
         clean_dataset(dataset, output)
     if action in ['tokenize', 'all']:
-        dataset = '../../data/partial_cleaned_covid19_tweets.csv'
-        output = '../../data/cleaned_covid19_tweets.csv'
+        dataset = f'{base}../../data/partial_cleaned_covid19_tweets.csv'
+        output = f'{base}../../data/cleaned_covid19_tweets.csv'
         tokenize_dataset(dataset, output)
     # clean_dataset(dataset, output)
     end = time.time()

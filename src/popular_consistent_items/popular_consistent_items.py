@@ -1,18 +1,23 @@
 import pandas as pd
 import regex as re
-from datetime import datetime
-from .apriori import apriori
-# from memory_profiler import profile
+from .apriori import apriori, apriori_opt
+from memory_profiler import profile
 # from collections import deque
 # import matplotlib.pyplot as plt
 from .utils import DATES, CONVERTERS, get_curr_timestamp, log
 # CHUNK_SIZE = 10000 # rows read per time
 TIME_RANGE = 43200 # seconds, to count frequency (43200 sec = 12 hours)
 
-
+def count(data, itemset):
+    count = 0
+    for tokens in data:
+        if itemset.issubset(tokens):
+            count += 1
+    # print(itemset, count)
+    return count
 
 # @profile
-def get_frequent_items_in_time(dataset, s, a, start, end):
+def get_frequent_items_in_time(dataset, s, a, start, end, frequent_itemset_f=apriori_opt):
     data = pd.read_csv(dataset, usecols=["time", "tokens"], encoding="utf-8", \
          parse_dates=DATES, converters = CONVERTERS).sort_values(by="time")
     if data.empty:
@@ -33,10 +38,14 @@ def get_frequent_items_in_time(dataset, s, a, start, end):
     for group, batch in data.groupby(grouper):
         if group >= end:
             break
-        time_periods += 1
         log(f"Period of {group}")
-        frequent_items = apriori(batch.tokens, s*len(batch))
+        frequent_items = frequent_itemset_f(batch.tokens, s*len(batch))
+        assert(len(frequent_items) == len(set(frequent_items)))
         for i in frequent_items:
+            # if (count(batch.tokens, i) < s*len(batch)):
+            #     print(i)
+
+            # assert(count(batch.tokens, i) >= s*len(batch))
             periods_frequent[i] = periods_frequent.get(i, 0) + 1
         time_periods += 1
     # log(f"{time_periods} anayzed, looking for topics in >= {p * time_periods} periods")

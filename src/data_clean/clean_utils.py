@@ -6,7 +6,7 @@ nltk.download('stopwords', quiet=True)
 nltk.download('wordnet', quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
 
-STOP_WORDS = set(stopwords.words('english')).union({"can't"})
+STOP_WORDS = set(stopwords.words('english')).union({"can't", "get", "let", "th", "pm"})
 PUNCTUATION = '!"”“#@$€£%&()*+,-./:;<=>?[\\]^_{|}~•…–—'
 
 # ------- REGEX -------
@@ -46,6 +46,8 @@ REPLACE_RE = [
               (PUNCTUATION_REGEX                 , ' '),
               (EMOJI_REGEX                       , ' '),
               (re.compile('(?:new )?coronavirus'), 'covid'),
+              (re.compile('sarscov'), 'covid'),
+              (re.compile(r'(?:donald)?\btrump'), 'realdonaldtrump')
               ]
 
 

@@ -1,5 +1,102 @@
 \section{Related Work}
+\label{sec:rw}
 % (max 1 page. You briefly describe for the methods you will use, what
 % they do and what is their role. E.g. you describe what clustering does and what
 % techniques exist for clustering.
-\dots
+In this chapter we introduce some concepts and techniques used to preprocess 
+the dataset and to find popular consistent topics in the tweets.
+We also briefly introduce what other methods could be used to find 
+popular topics.
+
+\mathchardef\mhyphen="2D
+\subsection{TF-IDF}
+
+In several applications, such as the one treated in this paper, 
+it can be useful to categorize documents by their topic. Typically, this 
+is done by finding, for each document, the words that characterize it.
+
+Term Frequency - Inverse Document Frequency (TF-IDF) is a numerical statistic 
+that is intended to reflect how important a word is for a document in a collection.~\cite{rw:tfidf}
+This measure consists of a product of two components: TF and IDF.
+
+\begin{definition}
+    The \emph{Term Frequency} (\emph{TF}) of a word $i$ in a document $j$ is defined as
+    \begin{equation*}
+        \mathit{TF}_{ij} = \frac{\mathit{f}_{ij}}{\max_k{\mathit{f}_{kj}}}
+    \end{equation*}
+    where 
+    $\mathit{f}_{ij}$ is the number of times $i$ appears in $j$.
+\end{definition}
+
+\begin{definition}
+    The \emph{Inverse Document Frequency} (\emph{IDF}) of a word $i$ in a document $j$ is defined as
+    \begin{equation*}
+        \mathit{IDF}_{ij} = \log{\frac{N}{n_i}}
+    \end{equation*}
+    where $N$ is the total number of documents and $n_i$ is the number of documents the word $i$
+    appears in.
+\end{definition}
+
+\begin{definition}
+    The \emph{Term Frequency - Inverse Document Frequency} (\emph{TF-IDF}) of a word $i$ in a document 
+    $j$ is defined as
+    \begin{equation*}
+        \mathit{TF \mhyphen IDF}_{ij} = \mathit{TF}_{ij} * \mathit{IDF}_{ij}
+    \end{equation*}
+\end{definition}
+
+As we discuss in Section~\ref{sec:ds}, this technique can be used to preprocess the tweets in order to 
+keep only relevant terms for each tweet. The objective is to obtain a more 
+suitable dataset, excluding words that are used frequently but 
+do not characterize the topic the tweets are about. We do this in order to obtain higher quality 
+results and also to reduce the dimension of the input, so to speed up the execution time. 
+
+\subsection{Finding Frequent Itemsets}
+A subtask of the problem consists in finding popular topics in a period of time. This task can 
+be reduced to the more general scenario in which we are given a list of
+transactions, each containing a set of items. The problem to face is to find frequent 
+itemsets, that are sets of items that appear 
+together in many transactions, in order to find, for instance, association rules.
+The fraction of transactions in which an itemset $i$ is present is called \emph{support} 
+of $i$, and an itemset is said to be frequent if its support is at least $s$, where 
+$s$ is a threshold set in advance.
+An algorithm that solves this task efficiently is A-Priori.
+
+\subsubsection{A-Priori}
+The algorithm was first introduced in 1994 by Agrawal R.S. and Srikant R. and
+it is a very fast algorithm to discover frequent itemsets in a
+list of transactions.~\cite{rw:apriori}
+
+The efficiency of the algorithm is based on the following observation:
+if an itemset is frequent, then all its subsets are frequent too.
+This property of monotonicity is exploited by the algorithm by 
+seeing the implication in reverse way, that is itemsets whose 
+subsets are not all frequent can not become frequent, so a great 
+quantity of potential candidates is discarded.
+
+The idea of A-Priori is shown in Algorithm~\ref{alg:apriori_basic}.
+\input{algorithms/apriori_basic.tex}
+
+At each iteration we have a set of candidate itemsets of size $k$ and 
+we find among them frequent itemsets of size $k$. 
+Initially, frequent itemsets of size $1$ are the sets containing a single item.
+At each iteration, we get the frequent itemsets of size $k$, which are 
+the itemsets among the candidates with a support at least $s$.
+Then, we build the candidates of size $k+1$, by merging two frequent itemsets 
+of size $k$ and checking if all the subsets of size $k$ of the new candidate 
+are frequent. We repeat this process until the set of candidates is not empty.
+
+Though A-Priori avoids counting many itemsets, there are numerous optimizations
+that make a better use of the main memory.
+
+Among these, PCY, the Multistage and the Multihash algorithms try to 
+further reduce the memory used to count frequent itemsets
+that are known an advance not to be candidates to 
+become frequent.~\cite{alg:pcy}\cite{alg:multi} 
+
+The SON algorithm applies a different heuristic, by dividing the file in 
+chunks that can be stored in main memory to individuate
+the candidate frequent itemsets more rapidly.~\cite{alg:son}
+
+In this paper we focus just on the A-Priori algorithm, although the other
+algorithms could be used to deal with larger datasets. 

@@ -1,0 +1,61 @@
+\SetStartEndCondition{ (}{)}{)}\SetAlgoBlockMarkers{}{\}}%
+% \SetKwProg{Fn}{dsadsadas}{dsadad}
+% \SetKwFunction{FRecurs}{generate\_multilayer}%
+\SetKwFor{For}{for }{ \textbf{do}}{}{}%
+\SetKwFor{ForEach}{foreach }{ \textbf{do}}{}{}%
+\SetKwFor{If}{if }{ \textbf{then}}{}{}%
+\SetKwFor{While}{while }{ \textbf{do}}{}{}%
+% \SetKwIF{If}{ElseIf}{Else}{if}{\{}{elif}{else\{}{}%
+% \SetKwFor{While}{while}{\{}{}%
+% \SetKwRepeat{Repeat}{repeat\{}{until}%
+% \AlgoDisplayBlockMarkers
+% \SetAlgoNoLine%
+\begin{algorithm}   
+    \caption{Popular consistent topics}
+    \label{alg:pcis}
+% \Fn{\FRecurs{asd}}
+    % {
+    \newcommand{\var}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    \newcommand{\call}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \SetStartEndCondition{ }{}{}%
+    \DontPrintSemicolon
+    % \Fn{\FMain{$T$, $s$, $r$, $start$, $end$, $a$}}{
+    \Input{
+        % s, a, start, end, frequent_itemset_f=apriori
+        \textsc{Tweet} \var{T} \abracks \\
+        \tfloat\ \var{s} \\
+        \tfloat\ \var{r} \\
+        \textsc{Timestamp} \var{start} \\
+        \textsc{Timestamp} \var{end} \\
+        \tint\ \var{a} \\
+    }
+    
+    $\var{groups} \gets groupByTime(\var{T}, \var{start}, \var{end}, \var{a})$
+    
+
+    $\var{counter} \gets $\textsc{HashMap}()
+
+    \ForEach {$\var{group} \in \var{groups}$}{
+        $\var{frequentTopics} \gets$ \call{APriori}(\var{group}, $\var{s}$)
+
+        \ForEach{$\var{topic} \in \var{frequentTopics}$}{
+            $\var{counter}[\var{topic}] \gets \var{counter}[\var{topic}] + 1$
+        }
+    }
+
+    $\var{ret} \gets \emptyset$
+
+    \ForEach{$\var{topic}, \var{count} \in \var{counter}$}{
+
+        \If{$\var{count} \geq \var{r} * |\var{groups}|$}{
+
+            $\var{ret} \gets \var{ret} \cup \{\var{topic}\}$
+
+        }
+    }
+            
+    \Return{ret}
+\end{algorithm}

@@ -1,4 +1,27 @@
 \section{Implementation}
 % (Description of what tools you have used to implement the solution
 % you described above)
-\dots
+The dataset manipulation and the algorithm have been developed and 
+tested using Python $3.8.5$,
+exploiting some useful tools offered by the language and the available
+libraries.
+
+\subsection{Dataset manipulation}
+As we explain in Section~\ref{sec:ds}, the original dataset was precomputed 
+to extract from each tweet the relevant terms by which it is composed.
+For reading and cleaning the dataset the following libraries were used:
+\begin{description}
+    \item[Pandas] to read and write the csv;
+    \item[HTML] to unescape html special characters;
+    \item[Regex] to manipulate the text;
+    \item[NLTK] to remove stop words, lemmatize words and split the text into tokens;    
+\end{description}
+
+\subsection{Algorithm implementation}
+The A-Priori algorithm was implemented from scratch in order to adapt it to the specific 
+case and apply the optimizations discussed in Section~\ref{sec:sol}. So, 
+the only external library used was \emph{Pandas}, which was used to read the 
+csv and to group the tweets by period of time.
+
+The complete code is available on Github.~\cite{code:github}
+

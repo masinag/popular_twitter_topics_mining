@@ -1,0 +1,73 @@
+\SetStartEndCondition{ (}{)}{)}\SetAlgoBlockMarkers{}{\}}%
+% \SetKwProg{Fn}{dsadsadas}{dsadad}
+% \SetKwFunction{FRecurs}{generate\_multilayer}%
+\SetKwFor{For}{for }{ \textbf{do}}{}{}%
+\SetKwFor{ForEach}{foreach }{ \textbf{do}}{}{}%
+\SetKwFor{If}{if }{ \textbf{then}}{}{}%
+\SetKwFor{While}{while }{ \textbf{do}}{}{}%
+% \SetKwIF{If}{ElseIf}{Else}{if}{\{}{elif}{else\{}{}%
+% \SetKwFor{While}{while}{\{}{}%
+% \SetKwRepeat{Repeat}{repeat\{}{until}%
+% \AlgoDisplayBlockMarkers
+% \SetAlgoNoLine%
+
+
+
+\begin{algorithm}   
+    \caption{Efficient A-Priori}
+    \label{alg:apriori_opt}
+% \Fn{\FRecurs{asd}}
+    % {
+    \newcommand{\var}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    \newcommand{\call}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \SetStartEndCondition{ }{}{}%
+    \DontPrintSemicolon
+    % \Fn{\FMain{$T$, $s$, $r$, $start$, $end$, $a$}}{
+    \Input{
+        % s, a, start, end, frequent_itemset_f=apriori
+        \textsc{Transaction} \var{T} \abracks \\
+        \tfloat\ \var{s} \\
+    }
+
+    $\var{k} \gets 1$
+    
+    $\var{C_k}, \var{indexTransactions}, \var{indexItem} \gets getItems(T)$
+
+    $\var{result} \gets \emptyset$
+    
+    \While{$C_k \neq \emptyset$}{
+        
+        $\var{L_k} \gets \emptyset$
+
+        \ForEach{$\var{c} \in \var{C_k}$}{
+
+            $\var{support} \gets \call{getSupport}(\var{c}, \var{indexTransactions})$
+
+            \If{$\var{support} \geq \var{s * |T|}$}{
+
+                $\var{L_k} \gets \var{L_k} \cup \{\var{c}\}$
+
+                \If{$|\var{c}| > 1$}{
+
+                    $\var{result} \gets \var{result} \cup \{\var{c}\}$
+                
+                }
+            }
+        }
+        
+        $\var{C_{k+1}} \gets \call{nextCandidates}(\var{L_k}, k+1)$
+
+        $\var{k} \gets \var{k} + 1$
+        
+        
+    }
+
+    \Return{$\call{mapItems}(\var{result}, \var{indexItem})$}
+
+\end{algorithm}
+
+    
+    

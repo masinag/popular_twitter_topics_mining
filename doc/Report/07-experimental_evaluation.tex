@@ -7,4 +7,138 @@
 % should also care not only about the quality but also about the scalability, i.e., time,
 % related to the size of the data. In this section, you should also have a subsection
 % called Dataset in which you describe how you created the test dataset)
-\dots
+In this section we show the results obtained on the dataset analyzed. First, we 
+examine the quality of the outputs through a user evaluation, then we compare them with 
+the ones obtained with a baseline method.
+Lastly, we observe the execution time and discuss the scalability of the algorithm to 
+bigger datasets.
+
+\subsection{User evaluation}
+Le us now show some of the results obtained, that are the consistent popular topics found
+by the algorithm described. Obviously, the quality and the quantity of the results depend
+also from the values of the parameters.
+The default values of the parameters have been set by hand by trying various alternatives
+and seeing which ones gave meaningful results. The values chosen are:
+\begin{itemize}
+    \item $s = 0.01$
+    \item $r = 0.10$
+    \item $a = 86400$ seconds, that correspond to one day
+\end{itemize}
+These values have been then variate to observe how the number and the quality of results 
+obtained vary consequently. 
+
+\input{tables/varying_s.tex}
+
+\input{tables/varying_r.tex}
+
+\input{tables/varying_a.tex}
+
+Tables~\ref{tab:s},~\ref{tab:r},~\ref{tab:a} show the results obtained with different values for the parameters.
+It can be observed how as the values of the parameters vary, there are some topics that show up in each case
+and we can therefore say with a pretty good confidence that they are consistent popular topics over time.
+These are `case new', `case report', `case total', `hour last', `mask wear' and `positive test'. Probably, they 
+are all related with news about the COVID-19 pandemic and it is likely they are consistent because every day 
+most nations used to publish the daily report of the situation and thus the pandemic was certainly a much discussed
+topic over the period.
+
+
+What can also be observed in Tables~\ref{tab:s} and~\ref{tab:r}, is that as the values of $r$ and $s$ decrease,
+as one could expect the
+topics found by the algorithm are more and more. So, some interesting topics show up just with lower
+values. However, some topics are only found with lower values of $s$ and some only with lower values 
+of $r$, so the parameters must be tuned accurately to find best quality results.
+
+A different matter is the $a$ parameter, as can be seen in Table~\ref{tab:a}. In fact, the topics found 
+with different values of $a$ do not follow a monotonic behaviour as observed for $r$ and $s$, so for 
+instance `case confirm' is only found when considering periods of 5 or 1 days, while it is not found
+when the periods considered are of 2 days or 12 hours. This is a particular observation that makes 
+even more difficult to identify the right duration of periods. 
+
+Overall, we can state that the great majority of the results obtained are meaningful. 
+This remark was also pointed out by the users to which we asked some opinion 
+about the quality of the results. Even if it would not be feasible to try to do the task by hand and 
+compare the expected results with the actual ones, the major comment is that the 
+topics found are in line with what they expected.
+Most of the topics are about the COVID-19, so for instance the ones that talk 
+about face masks, cases, death and vaccines, but some others are about US electins and 
+the Earth Overshoot Day (eod), which in 2020 was on 22nd of August. Thus, the ones found are 
+certainly relevant, even though there might be some other interesting topics that were not
+identified at all.
+
+\subsection{Comparison with baseline method}
+\input{tables/baseline.tex}
+We now compare the results obtained by our solution with a baseline method. As baseline, 
+we chose to apply the A-Priori algorithm on the whole dataset, ignoring the notion of time. 
+This result can be obtained by running the algorithm proposed and  
+setting the duration of a period of time equal to the number of days between the oldest 
+and the most recent tweet in the dataset.
+
+Table~\ref{tab:bl} shows the topics identified by the proposed solution and by the 
+baseline method. The parameters for our solution were set to their default values 
+and for the baseline we set the minimum support to $1\%$, so that we compare 
+topics found in the $1\%$ of the tweets of the whole dataset with the topics found 
+in the $1\%$ of the tweets of at least $10\%$ of the periods. 
+It can be observed how the baseline identifies very few topics while our solution 
+finds also topics that, even if they are not so frequent in the all dataset, are 
+frequent in small periods of time and are thus meaningful. Similar observations 
+can be made with different values for the parameters.
+
+\subsection{Scalability}
+
+\begin{figure}
+    \caption{Execution time with different input sizes}
+    \resizebox{\columnwidth}{!}{\input{tables/times.pgf}}
+    \label{fig:times}
+    \vspace*{-5mm}
+    \begin{flushleft}
+        The plot shows how the input size
+        is related to the execution time of two algorithms. The grey 
+        line corresponds to the time taken by the algorithm using 
+        a naive implementation of A-Priori, while the blue one 
+        represents the time taken by the more efficient implementation.
+        The two lines are plotted with different scales, so the 
+        efficient A-Priori is almost $100$ times faster than the naive one.
+    \end{flushleft}
+\end{figure}
+% \resizebox{0.5\textwidth}{!}{\input{tables/times.pgf}}
+Let us now discuss the execution time and the scalability of the proposed solution.
+Figure~\ref{fig:times} shows the excecution time with different input sizes of the 
+algorithm using a naive A-Priori implementation and using the efficient implementation
+described in Section~\ref{sec:sol}.
+The times were obtained by averaging 20 executions for each input size,
+each with a different sample of the data. 
+
+The two lines are plotted with different scales, so the efficient implementation is 
+roughly $100$ times faster than the naive one with almost all inputs up to more than
+$200$ times faster on the whole dataset, taking less than $2$ seconds compared to 
+more than $8$ minutes on average. 
+
+On the other hand, it must be taken into consideration that the dataset analyzed was not too large and it can be stored
+in main memory, thus probably there is a threshold above which the 
+time drastically increases, since the input does not fit in memory and 
+it may be possible that the proposed optimization is not feasible.
+However, actually we do not need to store the whole dataset in main memory 
+since we only analyze tweets of different periods of time independently. 
+So, we could sort the 
+tweets chronologically and read from the file just the tweets of the first period,
+find the frequent itemsets in it, then free the memory used to store the tweets, 
+read the tweets of the second period and so on.
+
+If the tweets in a period of time are still too much to be stored in 
+main memory or the itemsets to be counted, 
+it could be an option to use one of the optimizations of A-Priori listed 
+in Section~\ref{sec:rw} to find the frequent itemsets.
+
+
+
+
+
+% Another option to speed up the computation is to use a Map Reduce technique.
+% In fact, the algorithm proposed can be easilly be adapted to follow the 
+% Map Reduce pattern. In particular we could design a map function, which takes 
+% as input a chunk and for each tweet in the chunk returns a tuple
+% (p, tokens) where p is the period of time the tweet belongs to and tokens is 
+% the set of tokens of the tweet. Aftwards, a reduce function gets as 
+% input the period p and the list of the tokens of each tweet in that period
+% and finds the frequent itemsets in the list of tokens. The function then returns
+% a tup

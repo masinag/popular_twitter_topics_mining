@@ -1,9 +1,11 @@
+\PassOptionsToPackage{dvipsnames, table}{xcolor}
 \documentclass[sigconf,edbt]{acmart-edbt2021}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \usepackage{booktabs} % For formal tables
+\usepackage{pgf} % For formal tables
 
 
 % Copyright
@@ -23,13 +25,59 @@
 
 \pagestyle{empty} % removes running headers
 
+
 \usepackage{numprint}
 \npthousandsep{\,}
 \usepackage[nodayofweek,level]{datetime}
 
+\usepackage{amsmath}
+\usepackage{enumitem}
+%%%%%%%%%%%%%%%
+% Algorithms
+\usepackage[ruled,linesnumbered,noline,scleft,english]{algorithm2e}
+\usepackage{eqparbox}
+\newcommand{\algcmnt}[1]{%
+  \texttt{\hfill// \eqparbox{COMMENT}{#1}}%
+}
+\newcommand{\alglcmnt}[1]{%
+  \texttt{
+    \hfill// \begin{minipage}[t]{
+      \eqboxwidth{COMMENT}
+    }#1\strut\end{minipage}
+  }
+}
+
+
+\SetKwRepeat{Do}{do}{while}
+% \newcommand{\forcond}{$i=0$ \KwTo $n$}
+% \SetKwProg{Fn}{Function}{}{end}
+% \SetKwFunction{FRecurs}{FnRecursive}%
+\newcommand{\tint}{\textsc{Int}}
+\newcommand{\tfloat}{\textsc{Float}}
+\newcommand{\tbool}{\texttt{bool}}
+\newcommand{\tzgen}{\textsc{ZipfGenerator}}
+\newcommand{\HashTable}{\textsc{HashTable}}
+\newcommand{\False}{\texttt{False}}
+\newcommand{\True}{\texttt{True}}
+
+% \usepackage{algorithm}
+% \usepackage{algorithmicx}
+% \usepackage[noend]{algpseudocode}
+% \def\NoNumber#1{{\def\alglinenumber##1{}\State #1}\addtocounter{ALG@line}{-1}}
+% \floatname{algorithm}{}
+\newcommand{\abracks}{[\,]}
+\newcommand{\cbracks}{\{\,\}}
+% \usepackage{booktabs}
+% % \usepackage{caption}
+% \usepackage{siunitx} % formattazione numeri
+\newcommand{\checkC}[1]{\cellcolor{Gray!70}{#1}}
+
 
 \begin{document}
-\title{Identify Twitter popular consistent topics in time}
+\setlist[description]{font=\normalfont\itshape\textbullet\space}
+
+
+\title{Identifying Twitter popular topics consistent in time}
 % \titlenote{Produces the permission block, and copyright information}
 % \subtitle{Extended Abstract}
 % \subtitlenote{The full version of the author's guide is available as
@@ -117,8 +165,8 @@
 
 \begin{abstract}
 Nowadays, social networks are observed with interest by companies and 
-governments, since they reflect a part of the public opinion. In this paper 
-we focus on Twitter trends, that are the most talked about topics on the 
+governments, since their role is more and more important in the society. In this paper 
+we concentrate on Twitter trends, that are the most talked about topics on the 
 social network in some period of time. 
 We describe a method to identify popular consistent
 topics over time in tweets. This method is then evaluated and compared

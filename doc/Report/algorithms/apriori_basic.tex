@@ -1,0 +1,56 @@
+\SetStartEndCondition{ (}{)}{)}\SetAlgoBlockMarkers{}{\}}%
+% \SetKwProg{Fn}{dsadsadas}{dsadad}
+% \SetKwFunction{FRecurs}{generate\_multilayer}%
+\SetKwFor{For}{for }{ \textbf{do}}{}{}%
+\SetKwFor{ForEach}{foreach }{ \textbf{do}}{}{}%
+\SetKwFor{If}{if }{ \textbf{then}}{}{}%
+\SetKwFor{While}{while }{ \textbf{do}}{}{}%
+% \SetKwIF{If}{ElseIf}{Else}{if}{\{}{elif}{else\{}{}%
+% \SetKwFor{While}{while}{\{}{}%
+% \SetKwRepeat{Repeat}{repeat\{}{until}%
+% \AlgoDisplayBlockMarkers
+% \SetAlgoNoLine%
+
+
+
+\begin{algorithm}   
+    \caption{A-Priori}
+    \label{alg:apriori_basic}
+% \Fn{\FRecurs{asd}}
+    % {
+    \newcommand{\var}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    \newcommand{\call}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \SetStartEndCondition{ }{}{}%
+    \DontPrintSemicolon
+    % \Fn{\FMain{$T$, $s$, $r$, $start$, $end$, $a$}}{
+    \Input{
+        % s, a, start, end, frequent_itemset_f=apriori
+        \textsc{Transaction} \var{T} \abracks \\
+        \tfloat\ \var{s} \\
+    }
+
+    $\var{k} \gets 1$
+    
+    $\var{C_k} \gets items(T)$
+
+    \While{$C_k \neq \emptyset$}{
+        
+        $\var{L_k} \gets $ itemsets in $C_k$ with a support $\geq s$
+        
+      
+        $\var{C_{k+1}} \gets $ \parbox[t]{.6\linewidth}{itemsets of $k+1$ elements
+        %  obtained by combining two members of $L_{k}$,
+        having all subsets of size $k$ in $L_{k}$}
+        
+        $\var{k} \gets \var{k} + 1$
+    }
+
+    \Return{$\bigcup{\var{L_k}}$}
+
+\end{algorithm}
+
+    
+    

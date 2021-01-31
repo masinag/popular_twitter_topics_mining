@@ -1,0 +1,53 @@
+
+
+    \SetStartEndCondition{ (}{)}{)}\SetAlgoBlockMarkers{}{\}}%
+    % \SetKwProg{Fn}{dsadsadas}{dsadad}
+    % \SetKwFunction{FRecurs}{generate\_multilayer}%
+    \SetKwFor{For}{for }{ \textbf{do}}{}{}%
+    \SetKwFor{ForEach}{foreach }{ \textbf{do}}{}{}%
+    \SetKwFor{If}{if }{ \textbf{then}}{}{}%
+    \SetKwFor{While}{while }{ \textbf{do}}{}{}%
+    % \SetKwIF{If}{ElseIf}{Else}{if}{\{}{elif}{else\{}{}%
+    % \SetKwFor{While}{while}{\{}{}%
+    % \SetKwRepeat{Repeat}{repeat\{}{until}%
+    % \AlgoDisplayBlockMarkers
+    % \SetAlgoNoLine%
+    \SetAlgorithmName{Procedure}{}{}
+    \begin{algorithm}
+        % \renewcommand{\thealgocf}{}
+        \caption{mapItems}
+        \label{alg:mapItems}
+    % \Fn{\FRecurs{asd}}
+        % {
+        \newcommand{\var}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+        \newcommand{\call}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+        
+        \SetKwInOut{Input}{Input}
+        \SetKwInOut{Output}{Output}
+        \SetStartEndCondition{ }{}{}%
+        \DontPrintSemicolon
+        % \Fn{\FMain{$T$, $s$, $r$, $start$, $end$, $a$}}{
+        \Input{
+            % s, a, start, end, frequent_itemset_f=apriori
+            \textsc{Set} \var{frequentItemsets} \abracks \\
+            \textsc{Item} \var{indexItem} \\
+        }
+        
+        $\var{result} \gets \emptyset$
+
+        \ForEach{$\var{itemset} \in \var{frequentItemsets}$}{
+            $\var{tmp} \gets \bigcup\limits_{i \in \var{itemset}}{\{\var{indexItem}[\var{i}]\}}$
+            
+            % \ForEach{$\var{\var{item} \in \var{itemset}}$}{
+
+            %     $\var{tmp} \gets \var{tmp} \cup \{\var{indexItem}[\var{item}]\}$
+            
+            % }
+
+            $\var{result} \gets \var{result} \cup \{\var{tmp}\}$
+        }
+        
+
+        \Return{\var{result}}
+        
+\end{algorithm}

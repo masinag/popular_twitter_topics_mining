@@ -15,7 +15,6 @@ from matplotlib import pyplot as plt
 LEMMATIZE = True
 
 TF_IDF_THRESHOLD = 1.79
-
 tf_idfs = []
 lemmatizer = WordNetLemmatizer()
 
@@ -27,6 +26,7 @@ def get_df(tweets):
     return df
 
 def tokenize(tweets):
+    discarded = 0
     df = get_df(tweets)
     N = tweets.shape[0]
     # print(tweets[0], set(tweets[0]))
@@ -34,6 +34,7 @@ def tokenize(tweets):
     rt_tweets = []
     for i, tweet in enumerate(tweets):
         if not tweet:
+            discarded += 1
             continue
         tf = Counter(tweet)
         m = max(tf.values())
@@ -44,9 +45,11 @@ def tokenize(tweets):
             if tf_idf >= TF_IDF_THRESHOLD:
                 rt.append(term)
         
-        
-        rt_tweets.append(rt)
-
+        if rt:
+            rt_tweets.append(rt)
+        else:
+            discarded += 1
+    print(f"Discarded {discarded} empty tweets")
     return pd.Series(rt_tweets).apply(lambda l : ' '.join(l))
 
 def is_token(term):

@@ -1,0 +1,69 @@
+\SetStartEndCondition{ (}{)}{)}\SetAlgoBlockMarkers{}{\}}%
+% \SetKwProg{Fn}{dsadsadas}{dsadad}
+% \SetKwFunction{FRecurs}{generate\_multilayer}%
+\SetKwFor{For}{for }{ \textbf{do}}{}{}%
+\SetKwFor{ForEach}{foreach }{ \textbf{do}}{}{}%
+\SetKwFor{If}{if }{ \textbf{ then}}{}{}%
+\SetKwFor{While}{while }{ \textbf{do}}{}{}%
+\SetKwIF{If}{ElseIf}{Else}{if}{ then}{else if}{else}{}%
+% \SetKwFor{While}{while}{\{}{}%
+% \SetKwRepeat{Repeat}{repeat\{}{until}%
+% \AlgoDisplayBlockMarkers
+% \SetAlgoNoLine%
+\SetAlgorithmName{Procedure}{}{}
+\begin{algorithm}
+    % \renewcommand{\thealgocf}{}
+    \caption{getSupport}
+    \label{alg:getSupport}
+% \Fn{\FRecurs{asd}}
+    % {
+    \newcommand{\var}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    \newcommand{\call}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \SetStartEndCondition{ }{}{}%
+    \DontPrintSemicolon
+    % \Fn{\FMain{$T$, $s$, $r$, $start$, $end$, $a$}}{
+    \Input{
+        % s, a, start, end, frequent_itemset_f=apriori
+        \textsc{Set} \var{itemset} \\
+        \textsc{Set} \var{indexTransactions} \abracks \\
+    }
+
+    
+    % $\var{itemsetTrans} \gets \emptyset$
+    
+    % \ForEach{$\var{item} \in \var{itemset}$}{
+        
+    %     $\var{itemTrans} \gets \var{indexTransactions}[\var{item}]$
+        
+    %     \uIf{$\var{itemsetTrans} = \emptyset$}{
+
+    %         $\var{itemsetTrans} \gets \var{itemTrans}$
+            
+    %     } \uElse {
+        
+    %         $\var{itemsetTrans} \gets \var{itemsetTrans} \cap \var{itemTrans}$
+
+    %     }
+        
+    %     \If{$\var{itemsetTrans} = \emptyset$}{
+
+    %         \Return{0}
+            
+    %     }
+    % }
+
+    % \Return{$|\var{itemsetTrans}|$}
+
+
+    $\var{itemsetTrans} \gets \bigcap\limits_{\var{i} \in \var{itemset}}{\var{indexTransactions}[\var{i}]}$
+
+
+    \Return{$|\var{itemsetTrans}|$} 
+
+\end{algorithm}
+
+    
+    

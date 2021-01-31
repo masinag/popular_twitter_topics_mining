@@ -1,25 +1,48 @@
 \section{Dataset} 
+\label{sec:ds}
 % (Description of the dataset, and all the possible preprocessing that you
 % performed to it from the original form to the one you need in order to run your
 % program).
-We tested our algorithm over a dataset of \numprint{179108} tweets, 
-collected in the period from \formatdate{30}{8}{2020} to \formatdate{24}{7}{2020},
-a period in which the COVID-19 pandemic affected the life of everyone~\cite{dataset:gpreda}.
+The algorithm was tested over a dataset of \numprint{179108} tweets, 
+collected in the period from \formatdate{24}{7}{2020} to \formatdate{30}{8}{2020},
+a period in which the COVID-19 pandemic affected the life of 
+everyone~\cite{dataset:gpreda}.
 
 The original dataset is in csv format and for each tweet we are given much information,
-such as the date and time of publication in a timestamp format, the actual text, the hashtags and the indication if it was a 
+such as the date and time of publication in a timestamp format, 
+the actual text, the hashtags and the indication if it was a 
 retweet or not, along with information about the user who posted it.
 
-The only fields useful to us are the timestamp and the text. 
-So, we created a new dataset, where for each tweet we kept two fields: the timestamp of publication, as it was originally given, and a set of tokens, extracted from the original text as follows:
+The only fields useful to us are the date and time and the text. 
+So, we created a new dataset, where for each tweet we kept two fields: 
+the timestamp of publication, as it was originally given, and a set of tokens, 
+extracted from the original text as follows:
 \begin{enumerate}
-    \item Unescape HTML sequences, such as `\&amp;' for `\&' and transform the text to lowercase.
-    \item Remove, in order, urls, words that were trunked when the dataset was collected if the text was too long, numbers, punctuation marks, special characters and emojis.
-    \item Replace most common synonyms, such as `new coronavirus', `coronavirus' and `covid' are all replaced by `covid'.
-    \item Remove common stop words.
-    \item Split the string in terms and keep only one occurrence for each term.
+    \item Unescape HTML sequences, such as `\&amp;' becomes `\&' and transform the text to lowercase;
+    \item Remove  urls;
+    \item Remove trunked words at the end of the text;
+    \item Remove numbers. This decision was taken since the majority of numbers in tweets
+        do not provide any relevant information about the topic treated and it is likely 
+        that the same number appears in many different tweets just by chance;
+    \item Remove special symbols and emojis. In this process we remove also `\#', that 
+        identifies an hashtag and `@' that identifies a person username. The purpose of it 
+        is that even if hashtags and usernames have a particular semantic in tweets, most 
+        of the times their meaning does not change if they are considered as simple words.
+        Thus, we can count them together with their non-hashtag or non-username version to 
+        obtain better results;
+    \item Use the same word to express some of the most common synonyms, 
+        such as `new coronavirus', `coronavirus' and `covid' are all replaced by `covid';
+    \item Lemmatize words. Lemmatization is the process of reducing the different 
+        forms of a word to one single form, for example, reducing `builds', 
+        `building', and `built' to the lemma `build'. In this way, we count together 
+        words that are essentially referring to the exact same concept;
+    \item Remove common stop words and single-letter words;
+    \item Remove terms with a low TF-IDF. The threshold was chosen to remove terms with 
+        a score lower than the 10\% of all terms scores. This process was done to 
+        keep for each tweet only the words that regard the topic discussed, removing
+        some `noise' caused by the most common words that appear in almost every tweet.
+    \item The terms of a tweet are the remaining words, i.e. sequences of non-space
+        characters.
+    \item The tweets with no tokens left are discarded
 \end{enumerate}
-Finally, tweets are sorted chronologically as described in Section~\ref{sec:ps}.
 
-The reason we removed numbers is that we observed that they do not tell much about the topic is talked about in the tweet, while, on the opposite, they might add some noise by making appear words as district even if they are actually almost the same for our purpose, such as `covid' and `covid19' both refer to the same concept. For the same reason, we replaced words by their most common synonym.
-Furthermore, we removed stop words because they do not add any information for what our problem is concerned and they only increase the input size and the noise in the results.

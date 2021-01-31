@@ -1,6 +1,6 @@
 \section{Problem Statement}
 \label{sec:ps}
-In this Section we formalize the problem introduced in Section~\ref{sec:intro}, 
+In this section, we formalize the problem introduced in Section~\ref{sec:intro}, 
 providing also some definitions to better explain the problem and the proposed solution.
 
 First, we define some concepts used in the problem definition.
@@ -8,7 +8,7 @@ First, we define some concepts used in the problem definition.
     A \emph{term} is a sequence of characters.
 \end{definition}
 \begin{definition}
-    A \emph{topic} is a set of terms.
+    A \emph{topic} is a set of at least two terms.
 \end{definition}
 \begin{definition}
     A \emph{tweet} $t$ is a pair $(\mathit{time}, \mathit{tokens})$ where
@@ -58,15 +58,18 @@ $\mathit{t}_i = (\mathit{time}_i, \mathit{tokens}_i)$;
 %  and $\mathit{time}_1 \leq \mathit{time}_2 \leq \dots \mathit{time}_n$;
     \item The two real numbers $s, r \in \rm I\!R$
     such that $0 \leq s, r \leq 1$;
-    \item Two timestamps $\mathit{start}$, $\mathit{end}$ and an integer $a \in \rm I\!N$
+    \item Two timestamps $\mathit{start}$, $\mathit{end}$ and a number $a \in \rm I\!N$
     such that $a > 0$.
-    $\mathit{start}$ and $\mathit{end}$ indicate the start of the first period 
+    The timestamps $\mathit{start}$ and $\mathit{end}$ indicate the start of the first period 
     of time we consider and the end of the last one, respectively. The parameter
     $a$ indicates the duration of each period of time, in seconds.
     The periods of time we consider are
-    $P = \{(\mathit{start}, \mathit{start} + a), (\mathit{start} + a, \mathit{start} + 2a), 
-    \dots , (\mathit{start} + ka, \mathit{start} + (k+1)a),\}$
-    such that $\mathit{start} + ka < \mathit{end} \leq start + (k+1)a$. 
+
+    $P = \{(\mathit{start}, \mathit{start} + a),
+              (\mathit{start} + a, \mathit{start} + 2 a), 
+    \dots , (\mathit{start} + k a, \mathit{start} + (k+1) a)\}$
+    such that $\mathit{start} + k a < \mathit{end} \leq start + (k+1) a$
+
 \end{itemize}
 
 \paragraph{Output}

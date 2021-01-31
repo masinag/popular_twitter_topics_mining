@@ -4,4 +4,82 @@
 % specific software component tools description here. Also, you do not explain things
 % already known by the theory, e.g., do not start elaborating on what is clustering and
 % how useful it is.)
-\dots
+In this section, we present an algorithm to deal with the problem. 
+Furthermore, we also describe some optimizations, whose improvement will be 
+shown in Section~\ref{sec:eval} along with the evaluation results.
+
+\subsection{Proposed solution}
+The solution we propose is based on the A-Priori algorithm. 
+
+The general idea is that we first group the tweets by the period they belong to, 
+and then, for each period, we find the popular topics in the period by
+exploiting the A-Priori algorithm. In this case, the transactions are represented by 
+the tweets and the items of a transaction are the relative tokens. Consequently, 
+the frequent itemsets returned by the algorithm are the popular topics of the period.
+So, we extract the popular topics in the period using the A-Priori algorithm, 
+setting as threshold $s$. 
+
+By doing so, we build another dataset which will be the input for another 
+instance of the A-Priori: in 
+the new dataset, we have a transaction for each period of time and the items of a transaction
+are the popular topics in that period. As threshold for this second instance we use $r$.
+
+This algorithm answer exactly the problem stated in Section~\ref{sec:ps}, as 
+it finds the topics which are $s$-popular in a fraction of periods of time greater than or equal to $r$,
+which is the definition of $s$-popular-$r$-consistent. 
+
+Actually, since in the second instance of the algorithm we only need to find 
+itemsets of size $1$, i.e. single topics,
+we only need to count in how many periods of time a topic is found to be frequent.
+Thus, we only need to perform the first pass of A-Priori, without the need to build 
+candidate pairs and so on. The complete process is shown in Algorithm~\ref{alg:pcis}. 
+
+\input{algorithms/popular_consistent_itemsets.tex}
+
+
+The classical A-Priori algorithm is described in Section~\ref{sec:rw}.
+However, if the dataset is not too big, we can exploit this 
+fact to implement it more efficiently, by storing some additional 
+data structures. We now proceed to describe these optimizations. 
+
+% \input{algorithms/apriori_standard.tex}
+
+\subsection{Optimizations}
+
+The idea is illustrated in Algorithm~\ref{alg:apriori_opt}.
+
+\input{algorithms/apriori_std_opt.tex}
+
+
+First, Procedure~\ref{alg:getItems} is called. The procedure scans all the transactions 
+and the items in them, building three data structures:
+\begin{description}
+    \item[itemIndex, indexItem] used to map items to numbers and vice versa. In fact, 
+        the algorithm finds frequent itemsets of numbers corresponding to items, to 
+        be more efficient both in terms of time and memory. 
+        Once the itemsets of numbers are found, they are converted back to sets of items.  
+    \item[items] that is a set composed of the sets containing single items, i.e. the candidates 
+        of size $1$. 
+    \item[indexTransactions] an array where the $i$-th entry is the set of the transactions 
+        containing the $i$-th item.
+\end{description}
+
+The rest of the algorithm is almost the same as the classical 
+version, except for the computation of the support of an itemset
+in Procedure~\ref{alg:getSupport}, 
+which exploits the \emph{indexTransactions} structure to speed up the 
+computation. In fact, having in main memory the set of transactions 
+containing each item allows us to get the support of the 
+itemset fast by computing the size of the intersection of the transactions set of
+each item in the itemset.
+
+Finally, once found the frequent itemsets are found, the algorithm maps back 
+set of numbers to sets of items, as shown in Procedure~\ref{alg:mapItems}.
+
+% \input{algorithms/apriori_opt.tex}
+
+\input{algorithms/apriori_std_get_items.tex}
+
+\input{algorithms/apriori_std_get_support.tex}
+
+\input{algorithms/apriori_std_map_items.tex}

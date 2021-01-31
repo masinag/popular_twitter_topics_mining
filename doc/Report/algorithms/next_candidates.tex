@@ -1,0 +1,70 @@
+
+
+\SetStartEndCondition{ (}{)}{)}\SetAlgoBlockMarkers{}{\}}%
+% \SetKwProg{Fn}{dsadsadas}{dsadad}
+% \SetKwFunction{FRecurs}{generate\_multilayer}%
+\SetKwFor{For}{for }{ \textbf{do}}{}{}%
+\SetKwFor{ForEach}{foreach }{ \textbf{do}}{}{}%
+\SetKwFor{If}{if }{ \textbf{then}}{}{}%
+\SetKwFor{While}{while }{ \textbf{do}}{}{}%
+% \SetKwIF{If}{ElseIf}{Else}{if}{\{}{elif}{else\{}{}%
+% \SetKwFor{While}{while}{\{}{}%
+% \SetKwRepeat{Repeat}{repeat\{}{until}%
+% \AlgoDisplayBlockMarkers
+% \SetAlgoNoLine%
+\SetAlgorithmName{Procedure}{}{}
+\begin{algorithm}
+\renewcommand{\thealgocf}{}
+    \caption{nextCandidates}
+    \label{alg:nextCandidates}
+% \Fn{\FRecurs{asd}}
+    % {
+    \newcommand{\var}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    \newcommand{\call}[1]{\relax\ifmmode\mathit{#1}\else $\mathit{#1}$\fi}
+    
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \SetStartEndCondition{ }{}{}%
+    \DontPrintSemicolon
+    % \Fn{\FMain{$T$, $s$, $r$, $start$, $end$, $a$}}{
+    \Input{
+        % s, a, start, end, frequent_itemset_f=apriori
+        \textsc{Set} \var{L_{k-1}} \\
+        \tint\ \var{k} \\
+    }
+
+    \ForEach{$\var{s1} \in \var{L_{k-1}}$}{
+
+        \ForEach{$\var{s2} \in \var{L_{k-1}}$}{
+        
+            $\var{c} \gets \var{s1} \cup \var{s2}$
+
+            \If{$|\var{c}| = \var{k}$}{
+
+                \ForEach{$\var{subset} \in \call{getSubsets}(\var{c}, \var{k} - 1)$}{
+
+                    \If {$\var{subset} \notin \var{L_{k-1}}$}{
+
+                        $\var{insert} \gets \False$    
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+    % next_candidates = [
+    %     candidate for candidate in tmp_next_candidates
+    %     if all( x in prev_candidates
+    %         for x in map(frozenset, combinations(candidate, k - 1)))
+    % ]
+    % return next_candidates
+    
+
+    \Return{\var{C_k}}
+        
+\end{algorithm}
+
